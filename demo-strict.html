@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>showModalDialogMulti polyfill demo</title>
+    <title>showModalDialogMultiStrict polyfill demo</title>
     <meta charset="utf-8" />
-    <script src="showModalDialogMulti.js"></script>
+    <script src="showModalDialogMultiStrict.js"></script>
 </head>
 <body>
-    <h1>showModalDialogMulti polyfill demo</h1>
-    <p>This doesn't use strict mode and is supported in all major browsers including Internet Explorer. But it uses Function.caller property which already is deprecated in FireFox and probably soon will be removed from other browsers too.</p>
+    <h1>showModalDialogMultiStrict polyfill demo</h1>
+    <p>This uses strict mode and is supported in all major browsers excluding Internet Explorer. It uses only yield or await functionality which Internet Explorer doesn't support.</p>
     <form action="">
         <p><input id="x" placeholder="Input number" /></p>
         <p><input id="button1" type="button" value="Show Modal Dialog using yield" /> <span id="result1"></span></p>
         <p><input id="button2" type="button" value="Show Modal Dialog using async/await" /> <span id="result2"></span></p>
-        <p><input id="button3" type="button" value="Show Modal Dialog using eval" /> <span id="result3"></span></p>
         <p><input id="bt_close" type="button" value="Close dialog" /></p>
     </form>
 
@@ -31,7 +30,8 @@
         document.getElementById('button1').addEventListener('click', function() {
             spawn(function*() {
                 var opt = "dialogWidth:800px;dialogHeight:380px";
-                var ret = yield window.showModalDialog("demo.html", document.getElementById("x").value, opt);
+                var ret = yield window.showModalDialog("demo-strict.html", document.getElementById("x").value, opt);
+console.log('CONTINUE');
                 document.getElementById('result1').innerHTML = "Returned from modal: <b>" + ret + "</b>";
             });
         });
@@ -39,15 +39,9 @@
         //using async/await
         document.getElementById('button2').addEventListener('click', async function() {
             var opt = "dialogWidth:800px;dialogHeight:380px";
-            var ret = await window.showModalDialog("demo.html", document.getElementById("x").value, opt);
+            var ret = await window.showModalDialog("demo-strict.html", document.getElementById("x").value, opt);
+console.log('CONTINUE');
             document.getElementById('result2').innerHTML = "Returned from modal: <b>" + ret + "</b>";
-        });
-
-        //using eval
-        document.getElementById('button3').addEventListener('click', function() {
-            var opt = "dialogWidth:800px;dialogHeight:380px";
-            var ret = window.showModalDialog("demo.html", document.getElementById("x").value, opt);
-            document.getElementById('result3').innerHTML = "Returned from modal: <b>" + ret + "</b>";
         });
 
         // close most recent dialog

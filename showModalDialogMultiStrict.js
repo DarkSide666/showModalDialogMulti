@@ -1,3 +1,4 @@
+'use strict';
 (function() {
     // All references to document object will be on top window
     var dialogDocument = window.top.document;
@@ -41,13 +42,6 @@
         arg = arg || null; //arguments to a dialog
         opt = opt || 'dialogWidth:300px;dialogHeight:200px'; //options: dialogTop;dialogLeft;dialogWidth;dialogHeight or CSS styles
 
-        // To create an interface for the showModalDialog place showModalDialog.interface in a comment inside
-        // e.g.: function showMaximizedDialog(url, args, options) { // showModalDialog.interface
-        var callerName = (showModalDialog.caller + '').indexOf('showModalDialog.interface') > -1 ? showModalDialog.caller.name : 'showModalDialog';
-
-        // If it's only an interface, call the caller from caller
-        var caller = (callerName === 'showModalDialog' ? showModalDialog.caller : showModalDialog.caller.caller);
-        caller = showModalDialog.caller.toString();
         var dialogTitle = 'dialog-title';
         var dialog = dialogDocument.body.appendChild(dialogDocument.createElement('dialog'));
         var lastDialog = dialogDocument.querySelectorAll('dialog')[dialogDocument.querySelectorAll('dialog').length - 1];
@@ -123,49 +117,12 @@
         dialog.showModal();
 
         //if using yield or async/await
-        if (caller.indexOf('yield') >= 0 || caller.indexOf('await') >= 0) {
-            return new Promise(function (resolve, reject) {
-                dialog.addEventListener('close', function () {
-                    var returnValue = lastDialog.querySelector('#dialog-body').contentWindow.returnValue;
-                    dialogDocument.body.removeChild(dialog);
-                    resolve(returnValue);
-                });
+        return new Promise(function (resolve, reject) {
+            dialog.addEventListener('close', function () {
+                var returnValue = lastDialog.querySelector('#dialog-body').contentWindow.returnValue;
+                dialogDocument.body.removeChild(dialog);
+                resolve(returnValue);
             });
-        }
-
-        //if using eval
-        var isNext = false;
-        var nextStmts = caller.split('\n').filter(function(stmt) {
-            if (isNext || stmt.indexOf(callerName + '(') >= 0)
-                return isNext = true;
-            return false;
         });
-
-        dialog.addEventListener('close', function() {
-            var returnValue = lastDialog.querySelector('#dialog-body').contentWindow.returnValue;
-            dialogDocument.body.removeChild(dialog);
-            nextStmts[0] = nextStmts[0].replace(new RegExp('(window\.)?' + callerName + '\(.*\)' , 'g'), JSON.stringify(returnValue));
-            var unclosedParenthesis = (nextStmts[0].match(/\(/g) || []).length - (nextStmts[0].match(/\)/g) || []).length;
-            var closeParenthesis = repeat(')', unclosedParenthesis);
-            nextStmts[0] += closeParenthesis;
-            var decodedStmts = nextStmts.join('\n').replace(/^function\s+\(\s*\)\s*{/, '');
-            var unopenedBraces = (decodedStmts.match(/}/g) || []).length - (decodedStmts.match(/{/g) || []).length;
-            var openBraces = repeat('{', unopenedBraces);
-            eval(openBraces + '\n' + decodedStmts);
-        });
-        
-        // --------------------------------------------------------------
-        // Function to repeat string
-        function repeat(pattern, count) {
-            if (count < 1) return '';
-            var result = '';
-            while (count > 1) {
-                if (count & 1) result += pattern;
-                count >>= 1, pattern += pattern;
-            }
-            return result + pattern;
-        }
-        
-        throw 'Execution stopped until showModalDialog is closed';
     };
 })();
