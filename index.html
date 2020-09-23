@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>showModalDialogMulti polyfill demo</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>showModalDialogMulti polyfill demo</h1>
+
+    <ul>
+        <li><a href="demo.html">demo.html</a> - This doesn't use strict mode and is supported in all major browsers including Internet Explorer. But it uses Function.caller property which already is deprecated in FireFox and probably soon will be removed from other browsers too.</li>
+        <li><a href="demo-strict.html">demo-strict.html</a> - This uses strict mode and is supported in all major browsers excluding Internet Explorer. It uses only yield or await functionality which Internet Explorer doesn't support.</li>
+    </ul>
+</body>
+</html>
