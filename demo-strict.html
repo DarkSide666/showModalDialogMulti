@@ -31,7 +31,6 @@
             spawn(function*() {
                 var opt = "dialogWidth:800px;dialogHeight:380px";
                 var ret = yield window.showModalDialog("demo-strict.html", document.getElementById("x").value, opt);
-console.log('CONTINUE');
                 document.getElementById('result1').innerHTML = "Returned from modal: <b>" + ret + "</b>";
             });
         });
@@ -40,7 +39,6 @@ console.log('CONTINUE');
         document.getElementById('button2').addEventListener('click', async function() {
             var opt = "dialogWidth:800px;dialogHeight:380px";
             var ret = await window.showModalDialog("demo-strict.html", document.getElementById("x").value, opt);
-console.log('CONTINUE');
             document.getElementById('result2').innerHTML = "Returned from modal: <b>" + ret + "</b>";
         });
 
