@@ -1,0 +1,7 @@
+{
+    "name": "DarkSide666/showModalDialogMulti",
+    "description": "showModalDialog polyfill",
+    "require": {
+        "php": ">=5.6.0"
+    }
+}
