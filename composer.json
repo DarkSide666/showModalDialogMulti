@@ -1,5 +1,5 @@
 {
-    "name": "DarkSide666/showModalDialogMulti",
+    "name": "darkside666/show-modal-dialog-multi",
     "description": "showModalDialog polyfill",
     "require": {
         "php": ">=5.6.0"
